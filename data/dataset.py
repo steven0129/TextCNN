@@ -14,12 +14,13 @@ class TextDataset(data.Dataset):
         self.encoder = preprocessing.LabelEncoder()
         self.encoder.fit(list(map(lambda x: x[1], self.data)))
         self.max_length = 200
+        self.word_dim = 300
 
     def __getitem__(self, index):
         texts = self.data[index][0].split(' ')
         label = self.encoder.transform([self.data[index][1]])
         vecs = list(map(self.__w2v, texts))
-        vecs.extend([[0] * 300] * (self.max_length - len(vecs)))
+        vecs.extend([[0] * self.word_dim] * (self.max_length - len(vecs)))
 
         return torch.Tensor(vecs), torch.Tensor(label)
 
@@ -30,4 +31,4 @@ class TextDataset(data.Dataset):
         try:
             return self.model.wv[text].tolist()
         except:
-            return [0] * 300
+            return [0] * self.word_dim
