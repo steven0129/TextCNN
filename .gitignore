@@ -1,2 +1,3 @@
 wordvec/*.vec
 wordvec/*.bin
+__pycache__/
